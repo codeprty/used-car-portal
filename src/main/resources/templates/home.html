@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home - Used Car Portal</title>
+</head>
+<body>
+    <h2>Welcome to Used Car Portal</h2>
+    <p>Hello, <span th:text="${username}"></span>! You are logged in.</p>
+
+    <ul>
+        <li><a href="/cars">View Cars</a></li>
+        <li><a href="/my-listings">My Listings</a></li>
+        <li><a href="/post-car">Post a Car for Sale</a></li>
+        <li><form action="/logout" method="post">
+        		<input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+				<button type="submit">Logout</button>
+			</form>
+		</li>
+    </ul>
+</body>
+</html>

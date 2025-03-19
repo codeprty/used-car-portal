@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Car Listings</title>
+</head>
+<body>
+    <h1>My Car Listings</h1>
+
+    <h2>Active Listings</h2>
+    <table border="1">
+        <tr>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="car : ${activeCars}">
+            <td th:text="${car.make}"></td>
+            <td th:text="${car.model}"></td>
+            <td th:text="${car.year}"></td>
+            <td th:text="${car.price}"></td>
+            <td><img th:src="${car.imageUrl}" alt="Car Image" width="100"></td>
+            <td>
+                <a th:href="@{/edit-car/{id}(id=${car.id})}">Edit</a>
+                <form th:action="@{/deactivate-car/{id}(id=${car.id})}" method="post" style="display:inline;">
+                    <button type="submit">Deactivate</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <h2>Inactive Listings</h2>
+    <table border="1">
+        <tr>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Price</th>
+            <th>Image</th>
+        </tr>
+        <tr th:each="car : ${inactiveCars}">
+            <td th:text="${car.make}"></td>
+            <td th:text="${car.model}"></td>
+            <td th:text="${car.year}"></td>
+            <td th:text="${car.price}"></td>
+            <td><img th:src="${car.imageUrl}" alt="Car Image" width="100"></td>
+        </tr>
+    </table>
+
+    <a href="/home">Back to Home</a>
+</body>
+</html>
