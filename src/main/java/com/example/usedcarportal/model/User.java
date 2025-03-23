@@ -26,6 +26,18 @@ public class User {
     @Column(nullable = false)
     private Role role; // USER or ADMIN
 
+    public User() {
+        // Default constructor
+    }
+
+    public User(String email, String password, String fullName, String phoneNumber, Role role) {
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+    }
+
     // Getters and Setters
     public Long getId() {
         return id;
