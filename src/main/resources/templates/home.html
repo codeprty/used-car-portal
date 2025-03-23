@@ -8,14 +8,27 @@
     <p>Hello, <span th:text="${username}"></span>! You are logged in.</p>
 
     <ul>
-        <li><a href="/cars">View Cars</a></li>
-        <li><a href="/my-listings">My Listings</a></li>
+        <li><a href="/cars">View All Cars</a></li>
+        <li><a href="/appointments">Booking Appointments</a></li>
         <li><a href="/post-car">Post a Car for Sale</a></li>
-        <li><form action="/logout" method="post">
-        		<input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-				<button type="submit">Logout</button>
-			</form>
-		</li>
+        <li>
+            <form action="/logout" method="post">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                <button type="submit">Logout</button>
+            </form>
+        </li>
     </ul>
+
+    <h3>Your Car Listings</h3>
+    <div class="car-grid">
+        <div th:each="car : ${userCars}" class="car-item">
+            <img th:src="${car.imageUrl}" alt="Car Image" width="150">
+            <p><strong th:text="${car.make} + ' ' + ${car.model}"></strong></p>
+            <p>Year: <span th:text="${car.year}"></span></p>
+            <p>Price: $<span th:text="${car.price}"></span></p>
+            <p>Status: <span th:text="${car.active} ? 'Active' : 'Inactive'"></span></p>
+            <a th:href="@{/edit-car/{id}(id=${car.id})}">Edit</a>
+        </div>
+    </div>
 </body>
 </html>
