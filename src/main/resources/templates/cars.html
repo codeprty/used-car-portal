@@ -5,42 +5,16 @@
 </head>
 <body>
     <h1>Available Cars</h1>
-    
-    <table border="1">
-        <tr>
-            <th>Make</th>
-            <th>Model</th>
-            <th>Year</th>
-            <th>Price</th>
-            <th>Image</th>
-            <th>Actions</th>
-        </tr>
-        <tr th:each="car : ${cars}">
-            <td th:text="${car.make}"></td>
-            <td th:text="${car.model}"></td>
-            <td th:text="${car.year}"></td>
-            <td th:text="${car.price}"></td>
-            <td>
-                <img th:src="${car.imageUrl}" alt="Car Image" width="100">
-            </td>
-            <td>
-   		 		<!-- Regular user: Show Edit and Deactivate buttons -->
-    			<div th:if="${#authentication.name == car.postedBy}">
-        			<a th:href="@{/edit-car/{id}(id=${car.id})}">Edit</a>
-        				<form th:action="@{/deactivate-car/{id}(id=${car.id})}" method="post" style="display:inline;">
-            				<button type="submit">Deactivate</button>
-        				</form>
-    			</div>
 
-    			<!-- Admin: Show Delete button -->
-    			<div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-        			<form th:action="@{/admin/delete-car/{id}(id=${car.id})}" method="post">
-            			<button type="submit">Delete</button>
-        			</form>
-    			</div>
-			</td>
-        </tr>
-    </table>
+    <div class="car-grid">
+        <div th:each="car : ${cars}" class="car-item">
+            <img th:src="${car.imageUrl}" alt="Car Image" width="150">
+            <p><strong th:text="${car.make} + ' ' + ${car.model}"></strong></p>
+            <p>Year: <span th:text="${car.year}"></span></p>
+            <p>Price: $<span th:text="${car.price}"></span></p>
+            <a th:href="@{/car-details/{id}(id=${car.id})}">View Details</a>
+        </div>
+    </div>
 
     <a href="/home">Back to Home</a>
 </body>
