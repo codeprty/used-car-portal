@@ -9,4 +9,6 @@ import java.util.List;
 public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> findByActiveTrue(); // Get only active car listings
     List<Car> findByPostedByAndActive(String postedBy, boolean active);
+    List<Car> findByPostedBy(String postedBy);
+
 }
