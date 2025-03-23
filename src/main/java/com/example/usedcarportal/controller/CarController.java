@@ -1,40 +1,62 @@
 package com.example.usedcarportal.controller;
 
+import com.example.usedcarportal.model.Appointment;
 import com.example.usedcarportal.model.Car;
 import com.example.usedcarportal.repository.CarRepository;
+import com.example.usedcarportal.service.AppointmentService;
 import com.example.usedcarportal.service.ImageUploadService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
 public class CarController {
+    
     private final CarRepository carRepository;
     private final ImageUploadService imageUploadService;
+    private final AppointmentService appointmentService;
 
-    public CarController(CarRepository carRepository, ImageUploadService imageUploadService) {
+    public CarController(CarRepository carRepository, ImageUploadService imageUploadService, AppointmentService appointmentService) {
         this.carRepository = carRepository;
         this.imageUploadService = imageUploadService;
+        this.appointmentService = appointmentService;
     }
 
-    // Existing Car Listing Page
+    // Show the homepage with user-specific car listings
+    @GetMapping("/home")
+    public String showHomePage(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
+        String username = principal.getName();
+        List<Car> userCars = carRepository.findByPostedBy(username); // Fetch user's cars
+
+        model.addAttribute("username", username);
+        model.addAttribute("userCars", userCars);
+
+        return "home"; // Load home.html
+    }
+
+    // Show all active car listings
     @GetMapping("/cars")
     public String showCarList(Model model) {
         List<Car> cars = carRepository.findByActiveTrue();
         model.addAttribute("cars", cars);
-        return "cars"; // This will render cars.html
+        return "cars"; // Load cars.html
     }
 
-    // Show the Car Posting Form
+    // Show the car posting form
     @GetMapping("/post-car")
     public String showPostCarForm() {
-        return "post-car"; // This will render post-car.html
+        return "post-car"; // Load post-car.html
     }
 
-    // Handle Car Posting
+    // Handle the posting of a new car listing
     @PostMapping("/post-car")
     public String postCar(
             @RequestParam String make,
@@ -42,8 +64,12 @@ public class CarController {
             @RequestParam int year,
             @RequestParam double price,
             @RequestParam("imageFile") MultipartFile imageFile,
-            Principal principal) { // Get logged-in user's email
-        
+            Principal principal) {
+
+        if (imageFile.isEmpty()) {
+            return "redirect:/post-car?error=ImageRequired";
+        }
+
         String imageUrl = imageUploadService.saveImage(imageFile);
 
         Car car = new Car();
@@ -53,30 +79,30 @@ public class CarController {
         car.setPrice(price);
         car.setImageUrl(imageUrl);
         car.setActive(true);
-        car.setPostedBy(principal.getName()); // Save the user's email
+        car.setPostedBy(principal.getName()); // Associate car with the logged-in user
 
         carRepository.save(car);
-        return "redirect:/cars"; // Redirect to car listings after posting
+        return "redirect:/home"; // Redirect to home page
     }
-    
- // Show Edit Form (Only for the Car Owner)
+
+    // Show the edit car form for a specific car
     @GetMapping("/edit-car/{id}")
     public String editCarForm(@PathVariable Long id, Model model, Principal principal) {
-    	Car car = carRepository.findById(id).orElse(null);
-    	if (car == null) {
-    	    return "redirect:/cars?error=CarNotFound";
-    	}
+        Car car = carRepository.findById(id).orElse(null);
+        if (car == null) {
+            return "redirect:/home?error=CarNotFound";
+        }
 
-        // Restrict access: Only owner can edit
         if (!car.getPostedBy().equals(principal.getName())) {
-            return "redirect:/cars"; // Redirect unauthorized users
+            return "redirect:/home?error=UnauthorizedAccess";
         }
 
         model.addAttribute("car", car);
-        return "edit-car"; // Render edit-car.html
+        return "edit-car"; // Load edit-car.html
     }
 
-    // Handle Car Update
+    // Handle updates to an existing car listing
+ // Handle Car Update
     @PostMapping("/edit-car/{id}")
     public String updateCar(
             @PathVariable Long id,
@@ -84,66 +110,81 @@ public class CarController {
             @RequestParam String model,
             @RequestParam int year,
             @RequestParam double price,
+            @RequestParam("active") boolean active,
             @RequestParam("imageFile") MultipartFile imageFile,
             Principal principal) {
 
-    	Car car = carRepository.findById(id).orElse(null);
-    	if (car == null) {
-    	    return "redirect:/cars?error=CarNotFound";
-    	}
-
-        // Restrict update access
-        if (!car.getPostedBy().equals(principal.getName())) {
-            return "redirect:/cars";
+        Car car = carRepository.findById(id).orElse(null);
+        if (car == null) {
+            return "redirect:/home?error=CarNotFound";
         }
 
-        // Update details
+        if (!car.getPostedBy().equals(principal.getName())) {
+            return "redirect:/home?error=UnauthorizedAccess";
+        }
+
         car.setMake(make);
         car.setModel(model);
         car.setYear(year);
         car.setPrice(price);
 
-        // Update image if provided
+        // Update image only if a new one is provided
         if (!imageFile.isEmpty()) {
             String imageUrl = imageUploadService.saveImage(imageFile);
             car.setImageUrl(imageUrl);
         }
 
+        // Set active status from dropdown
+        car.setActive(active);
+
         carRepository.save(car);
-        return "redirect:/cars"; // Redirect to listing after update
+        return "redirect:/home";
     }
     
-    // Users can deactivate their own posts (not delete)
-    @PostMapping("/deactivate-car/{id}")
-    public String deactivateCar(@PathVariable Long id, Principal principal) {
-        Car car = carRepository.findById(id).orElseThrow(() -> new RuntimeException("Car not found"));
-
-        // Only the owner can deactivate
-        if (!car.getPostedBy().equals(principal.getName())) {
-            return "redirect:/cars";
+    // Show Car Details
+    @GetMapping("/car-details/{id}")
+    public String showCarDetails(@PathVariable Long id, Model model) {
+        Car car = carRepository.findById(id).orElse(null);
+        if (car == null) {
+            return "redirect:/cars?error=CarNotFound";
         }
 
-        car.setActive(false); // Mark the car as inactive
-        carRepository.save(car);
-        return "redirect:/cars";
+        model.addAttribute("car", car);
+        return "car-details"; // Redirect to car-details.html
     }
     
-    // Admin can delete a car
-    @PostMapping("/admin/delete-car/{id}")
-    public String deleteCar(@PathVariable Long id) {
-        carRepository.deleteById(id);
-        return "redirect:/cars";
-    }
-    
-    @GetMapping("/my-listings")
-    public String myListings(Model model, Principal principal) {
-        String username = principal.getName();
-        List<Car> activeCars = carRepository.findByPostedByAndActive(username, true);
-        List<Car> inactiveCars = carRepository.findByPostedByAndActive(username, false);
+    @PostMapping("/book-appointment")
+    public String bookAppointment(@RequestParam Long carId, @RequestParam String appointmentDate, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login"; // Ensure user is logged in
+        }
 
-        model.addAttribute("activeCars", activeCars);
-        model.addAttribute("inactiveCars", inactiveCars);
-        return "my-listings";
+        Car car = carRepository.findById(carId).orElse(null);
+        if (car == null) {
+            return "redirect:/cars?error=CarNotFound";
+        }
+
+        LocalDate date = LocalDate.parse(appointmentDate);
+        boolean booked = appointmentService.bookAppointment(carId, principal.getName(), date);
+        
+        if (!booked) {
+            return "redirect:/car-details/" + carId + "?error=AlreadyBooked";
+        }
+
+        return "redirect:/appointments"; // Redirect to appointments page
+    }
+
+    @GetMapping("/appointments")
+    public String showAppointmentsPage(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login"; // Ensure user is logged in
+        }
+
+        String username = principal.getName();
+        List<Appointment> userAppointments = appointmentService.getUserAppointments(username);
+
+        model.addAttribute("appointments", userAppointments);
+        return "appointments"; // Load appointments.html
     }
 
 }
