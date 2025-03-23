@@ -32,6 +32,14 @@
         <input type="file" name="imageFile">
         <br>
 
+        <!-- Dropdown for Active Status -->
+        <label>Status:</label>
+        <select name="active">
+            <option value="true" th:selected="${car.active}">Activate</option>
+            <option value="false" th:selected="${!car.active}">Deactivate</option>
+        </select>
+        <br>
+
         <button type="submit">Update Car</button>
     </form>
 
