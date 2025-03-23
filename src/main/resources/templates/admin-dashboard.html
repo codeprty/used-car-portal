@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Admin Dashboard</title>
+</head>
+<body>
+	<h2>Welcome to Admin Dashboard</h2>
+
+	<ul>
+		<li><a th:href="@{/admin/users}">View Registered Users</a></li>
+		<li><a th:href="@{/admin/appointments}">Manage Appointments</a></li>
+		<li><a th:href="@{/admin/cars}">Manage Car Listings</a></li>
+		<li><a th:href="@{/admin/profile}">Update Profile</a></li>
+	</ul>
+
+	<form action="/logout" method="post">
+		<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+		<button type="submit">Logout</button>
+	</form>
+</body>
+</html>
