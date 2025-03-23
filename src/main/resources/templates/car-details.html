@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Car Details</title>
+</head>
+
+<body>
+    <h2>Car Details</h2>
+
+    <img th:src="${car.imageUrl}" alt="Car Image" width="300">
+    <p><strong>Make:</strong> <span th:text="${car.make}"></span></p>
+    <p><strong>Model:</strong> <span th:text="${car.model}"></span></p>
+    <p><strong>Year:</strong> <span th:text="${car.year}"></span></p>
+    <p><strong>Price:</strong> $<span th:text="${car.price}"></span></p>
+    <p><strong>Posted By:</strong> <span th:text="${car.postedBy}"></span></p>
+
+    <button>Buy</button>
+
+    <form th:action="@{/book-appointment}" method="post">
+        <input type="hidden" name="carId" th:value="${car.id}">
+        <label>Select Appointment Date:</label>
+        <input type="date" name="appointmentDate" required>
+        <button type="submit">Book Appointment</button>
+    </form>
+
+    <!-- ✅ Fixed: Changed form action to match the updated controller -->
+    <form th:action="@{/bids/submit}" method="post">
+        <input type="hidden" name="carId" th:value="${car.id}" />
+        <label for="bidAmount">Your Bid:</label>
+        <input type="number" name="bidAmount" id="bidAmount" required />
+        <button type="submit">Submit Bid</button>
+    </form>
+
+    <a href="/cars">Back to Listings</a>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Car Bids</title>
+</head>
+<body>
+    <h2>Bids for <span th:text="${car != null ? car.make + ' ' + car.model : 'Unknown'}"></span></h2>
+
+    <!-- ✅ Fix: Show an error message if bids are empty -->
+    <div th:if="${bids == null or bids.isEmpty()}">
+        <p>No bids placed for this car yet.</p>
+    </div>
+
+    <table border="1" th:if="${bids != null and not bids.isEmpty()}">
+        <tr>
+            <th>Bidder</th>
+            <th>Bid Amount</th>
+            <th>Timestamp</th>
+        </tr>
+        <tr th:each="bid : ${bids}">
+            <td th:text="${bid.bidderUsername} ?: 'No bidder'"></td>
+            <td th:text="${bid.bidAmount} ?: 'No amount'"></td>
+            <td th:text="${bid.timestamp != null ? #temporals.format(bid.timestamp, 'yyyy-MM-dd HH:mm:ss') : 'No timestamp'}"></td>
+        </tr>
+    </table>
+
+    <a href="/home">Back to Home</a>
+</body>
+</html>

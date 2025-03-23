@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Appointments</title>
+</head>
+<body>
+    <h2>My Test Drive Appointments</h2>
+
+    <table border="1">
+        <tr>
+            <th>Car</th>
+            <th>Appointment Date</th>
+            <th>Seller</th>
+        </tr>
+        <tr th:each="appointment : ${appointments}">
+            <td th:text="${appointment.car != null ? appointment.car.make + ' ' + appointment.car.model : 'Car Not Found'}"></td>
+            <td th:text="${appointment.appointmentDate}"></td>
+            <td th:text="${appointment.car != null ? appointment.car.postedBy : 'Unknown'}"></td>
+        </tr>
+    </table>
+
+    <a href="/home">Back to Home</a>
+</body>
+</html>
