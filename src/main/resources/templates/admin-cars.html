@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Car Listings (Admin)</title>
+</head>
+<body>
+    <h2>Car Listings</h2>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Price</th>
+                <th>Posted By (Email)</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="car : ${cars}">
+                <td th:text="${car.id}"></td>
+                <td th:text="${car.make}"></td>
+                <td th:text="${car.model}"></td>
+                <td th:text="${car.year}"></td>
+                <td th:text="${car.price}"></td>
+                <td th:text="${car.postedBy}"></td> <!-- Show the email of the user who posted -->
+                <td th:text="${car.active ? 'Active' : 'Inactive'}"></td>
+                <td>
+                    <a th:href="@{/admin/cars/view/{id}(id=${car.id})}">View</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a href="/admin/dashboard">Back to Dashboard</a>
+</body>
+</html>

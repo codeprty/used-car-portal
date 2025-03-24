@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Car Management</title>
+</head>
+<body>
+    <h2>Car Management</h2>
+
+    <div th:if="${car}">
+        <p><strong>ID:</strong> <span th:text="${car.id}"></span></p>
+        <p><strong>Make:</strong> <span th:text="${car.make}"></span></p>
+        <p><strong>Model:</strong> <span th:text="${car.model}"></span></p>
+        <p><strong>Year:</strong> <span th:text="${car.year}"></span></p>
+        <p><strong>Price:</strong> <span th:text="${car.price}"></span></p>
+        <p><strong>Posted By:</strong> <span th:text="${car.postedBy}"></span></p>
+
+        <!-- Dropdown for Activate/Deactivate -->
+        <form th:action="@{/admin/car-management/update-status}" method="post">
+            <input type="hidden" name="id" th:value="${car.id}" />
+            <label><strong>Status:</strong></label>
+            <select name="active">
+                <option value="true" th:selected="${car.active}">Activate</option>
+                <option value="false" th:selected="${!car.active}">Deactivate</option>
+            </select>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+    <br>
+    <a href="/admin/cars">Back to Car Listings</a>
+</body>
+</html>
