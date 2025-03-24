@@ -17,19 +17,16 @@
 
     <button>Buy</button>
 
-    <form th:action="@{/book-appointment}" method="post">
+    <form th:action="@{/appointments/book}" method="post">
         <input type="hidden" name="carId" th:value="${car.id}">
+
         <label>Select Appointment Date:</label>
         <input type="date" name="appointmentDate" required>
-        <button type="submit">Book Appointment</button>
-    </form>
 
-    <!-- ✅ Fixed: Changed form action to match the updated controller -->
-    <form th:action="@{/bids/submit}" method="post">
-        <input type="hidden" name="carId" th:value="${car.id}" />
         <label for="bidAmount">Your Bid:</label>
-        <input type="number" name="bidAmount" id="bidAmount" required />
-        <button type="submit">Submit Bid</button>
+        <input type="number" name="bidAmount" required min="1" step="any">
+
+        <button type="submit">Save</button>
     </form>
 
     <a href="/cars">Back to Listings</a>
