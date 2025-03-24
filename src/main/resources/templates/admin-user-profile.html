@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>User Profile Management</title>
+</head>
+
+<body>
+    <h2>User Profile Management</h2>
+
+    <form th:action="@{/admin/users/update}" method="post">
+        <input type="hidden" name="id" th:value="${user.id}" />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" th:value="${user.email}" required /><br>
+
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" th:value="${user.fullName}" required /><br>
+
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" th:value="${user.phoneNumber}" required /><br>
+
+        <label for="role">Role:</label>
+        <select id="role" name="role">
+            <option value="USER" th:selected="${user.role == 'USER'}">USER</option>
+            <option value="ADMIN" th:selected="${user.role == 'ADMIN'}">ADMIN</option>
+        </select>
+
+        <br><br>
+
+        <!-- ✅ Only Reset Button (No Label, No Password Field) -->
+        <button type="button" onclick="resetPassword()">Reset Password</button>
+        <input type="hidden" id="hiddenPassword" name="password" value="" />
+
+        <br><br>
+        <button type="submit">Save</button>
+    </form>
+
+    <br>
+    <a href="/admin/users">Back to Registered Users</a>
+
+    <script>
+        function resetPassword() {
+            document.getElementById('hiddenPassword').value = 'password123'; // Default password
+            alert('Password will be reset to "password123" after clicking Save.');
+        }
+    </script>
+
+</body>
+
+</html>
