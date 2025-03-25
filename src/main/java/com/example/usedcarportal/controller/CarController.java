@@ -165,14 +165,15 @@ public class CarController {
         }
 
         LocalDate date = LocalDate.parse(appointmentDate);
-        boolean booked = appointmentService.bookAppointment(carId, principal.getName(), date);
-        
+        boolean booked = appointmentService.bookAppointmentAndBid(carId, principal.getName(), date, 0.0); // Dummy bid to avoid breaking the logic
+
         if (!booked) {
-            return "redirect:/car-details/" + carId + "?error=AlreadyBooked";
+        	return "redirect:/car-details/" + carId + "?error=AlreadyBooked"; // Send error message
         }
 
         return "redirect:/appointments"; // Redirect to appointments page
     }
+
 
     @GetMapping("/appointments")
     public String showAppointmentsPage(Model model, Principal principal) {
