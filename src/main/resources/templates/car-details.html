@@ -30,16 +30,6 @@
     </form>
 
     <a href="/cars">Back to Listings</a>
-    <script>
-        function showBookingError() {
-            alert('You have already booked this car for the selected date.');
-        }
-
-        let urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('error') && urlParams.get('error') === 'AlreadyBooked') {
-            showBookingError(); // ✅ Call the function only when error exists
-        }
-    </script>
 </body>
 
 </html>
