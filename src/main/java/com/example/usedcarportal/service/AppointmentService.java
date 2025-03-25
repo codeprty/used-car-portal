@@ -28,17 +28,20 @@ public class AppointmentService {
         this.carRepository = carRepository;
     }
 
-    // Book an appointment and save the bid in one transaction
+    // ✅ New method: Book an appointment only (no bid handling)
     @Transactional
-    public boolean bookAppointmentAndBid(Long carId, String username, LocalDate appointmentDate, double bidAmount) {
-        // Check if the user already has an appointment for this car
-        List<Appointment> existingAppointments = appointmentRepository.findByCarId(carId);
-        for (Appointment appt : existingAppointments) {
-            if (appt.getUsername().equals(username) && appt.getAppointmentDate().equals(appointmentDate)) {
-                return false; // Prevent duplicate bookings for the same date
-            }
-        }
+    public void bookAppointment(Long carId, String username, LocalDate appointmentDate) {
+        Appointment appointment = new Appointment();
+        appointment.setCarId(carId);
+        appointment.setUsername(username);
+        appointment.setAppointmentDate(appointmentDate);
+        appointment.setStatus("Pending");
+        appointmentRepository.save(appointment);
+    }
 
+    // ✅ Modified: Remove duplicate check since multiple bids are allowed
+    @Transactional
+    public void bookAppointmentAndBid(Long carId, String username, LocalDate appointmentDate, double bidAmount) {
         // Save appointment
         Appointment appointment = new Appointment();
         appointment.setCarId(carId);
@@ -50,8 +53,6 @@ public class AppointmentService {
         // Save bid
         Bid bid = new Bid(carId, username, bidAmount);
         bidRepository.save(bid);
-
-        return true;
     }
 
     // Get all appointments with car details

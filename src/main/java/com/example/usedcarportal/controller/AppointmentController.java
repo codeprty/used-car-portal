@@ -20,21 +20,17 @@ public class AppointmentController {
     // Handle appointment booking and bidding together
     @PostMapping("/book")
     public String bookAppointment(@RequestParam Long carId, 
-                                  @RequestParam String appointmentDate, 
+                                  @RequestParam LocalDate appointmentDate, 
                                   @RequestParam double bidAmount, 
                                   Principal principal) {
-
         if (principal == null) {
-            return "redirect:/login"; // Ensure the user is logged in
+            return "redirect:/login";
         }
 
-        boolean success = appointmentService.bookAppointmentAndBid(carId, principal.getName(),
-                LocalDate.parse(appointmentDate), bidAmount);
+        // Always allow saving the bid and appointment
+        appointmentService.bookAppointmentAndBid(carId, principal.getName(), appointmentDate, bidAmount);
 
-        if (!success) {
-            return "redirect:/car-details/" + carId + "?error=AlreadyBooked";
-        }
-
-        return "redirect:/car-details/" + carId + "?success=AppointmentAndBidSaved";
+        return "redirect:/appointments"; // ✅ Redirect after saving
     }
+
 }
