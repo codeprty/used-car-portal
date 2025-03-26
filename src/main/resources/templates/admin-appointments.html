@@ -1,48 +1,55 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin - Manage Appointments</title>
+<title>Admin - Manage Appointments</title>
 </head>
 <body>
-    <h2>Pending Appointments</h2>
-    
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Car</th>
-                <th>Seller</th>
-                <th>Bidder</th>
-                <th>Appointment Date</th>
-                <th>Bid Amount</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
+	<h2>Pending Appointments</h2>
+
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Car</th>
+				<th>Seller</th>
+				<th>Bidder</th>
+				<th>Appointment Date</th>
+				<th>Bid Amount</th>
+				<th>Status</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
             <tr th:each="appointment : ${appointments}">
-            <td th:text="${appointment.highestBid != null ? appointment.highestBid.bidderUsername : 'N/A'}"></td>
-    <td th:text="${appointment.car != null ? appointment.car.make + ' ' + appointment.car.model : 'N/A'}"></td>
-    <td th:text="${appointment.car != null ? appointment.car.postedBy : 'N/A'}"></td>
-    <td th:text="${appointment.appointmentDate}"></td>
-	<td th:text="${appointment.highestBid != null ? appointment.highestBid.bidAmount : 'N/A'}"></td>
-    <td th:text="${appointment.status}"></td>
-    
-    <td>
-        <form th:action="@{/admin/appointments/approve}" method="post">
-            <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
-            <input type="hidden" name="bidId" th:value="${appointment.highestBid != null ? appointment.highestBid.id : ''}" />
-            <button type="submit" th:disabled="${appointment.highestBid == null}">Approve</button>
-        </form>
-        <form th:action="@{/admin/appointments/deny}" method="post">
-            <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
-            <button type="submit">Deny</button>
-        </form>
-    </td>
-</tr>
+                <td th:text="${appointment.car != null ? appointment.car.make + ' ' + appointment.car.model : 'N/A'}"></td>
+                <td th:text="${appointment.car != null ? appointment.car.postedBy : 'N/A'}"></td>
+                <td th:text="${appointment.highestBid != null ? appointment.highestBid.bidderUsername : 'N/A'}"></td>
+                <td th:text="${appointment.appointmentDate}"></td>
+                <td th:text="${appointment.highestBid != null ? appointment.highestBid.bidAmount : 'N/A'}"></td>
+                <td th:text="${appointment.status}"></td>
+                <td>
+                    <form th:action="@{/appointments/approve}" method="post">
+                        <input type="hidden" name="appointmentId" th:value="${appointment.id}" /> 
+                        <input type="hidden" name="bidId" th:value="${appointment.highestBid != null ? appointment.highestBid.id : ''}" />
+                        <button type="submit"
+                            th:disabled="${appointment.status != 'Pending'}"
+                            th:classappend="${appointment.status != 'Pending' ? 'disabled-button' : ''}">
+                            Approve
+                        </button>
+                    </form>
 
+                    <form th:action="@{/appointments/deny/{id}(id=${appointment.id})}" method="post">
+                        <button type="submit"
+                            th:disabled="${appointment.status != 'Pending'}"
+                            th:classappend="${appointment.status != 'Pending' ? 'disabled-button' : ''}">
+                            Deny
+                        </button>
+                    </form>
+                </td>
+            </tr>
         </tbody>
-    </table>
 
-    <a th:href="@{/admin/dashboard}">Back to Dashboard</a>
+	</table>
+
+	<a th:href="@{/admin/dashboard}">Back to Dashboard</a>
 </body>
 </html>

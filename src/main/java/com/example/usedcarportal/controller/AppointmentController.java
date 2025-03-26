@@ -38,22 +38,21 @@ public class AppointmentController {
     
     @GetMapping("/admin")
     public String viewPendingAppointments(Model model) {
-        List<Appointment> pendingAppointments = appointmentService.getAppointmentsByStatus("Pending");
+        List<Appointment> pendingAppointments = appointmentService.getAppointmentsWithBidsSorted();
         model.addAttribute("appointments", pendingAppointments);
         return "admin-appointments";
     }
 
-    @PostMapping("/approve/{id}")
-    public String approveAppointment(@PathVariable Long id) {
-        appointmentService.approveAppointment(id);
-        return "redirect:/appointments/admin";
+    @PostMapping("/approve")
+    public String approveAppointment(@RequestParam Long appointmentId, @RequestParam(required = false) Long bidId) {
+        appointmentService.approveAppointment(appointmentId, bidId);
+        return "redirect:/admin/appointments";
     }
 
     @PostMapping("/deny/{id}")
     public String denyAppointment(@PathVariable Long id) {
         appointmentService.denyAppointment(id);
-        return "redirect:/appointments/admin";
+        return "redirect:/appointments/admin"; // ✅ Ensures admin page refreshes with updated data
     }
-
 
 }
