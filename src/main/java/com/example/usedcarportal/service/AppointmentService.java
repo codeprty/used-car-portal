@@ -64,4 +64,27 @@ public class AppointmentService {
         }
         return appointments;
     }
+    
+    public List<Appointment> getAppointmentsByStatus(String status) {
+        return appointmentRepository.findByStatus(status);
+    }
+    
+    @Transactional
+    public void approveAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+        if (appointment != null) {
+            appointment.setStatus("Approved");
+            appointmentRepository.save(appointment);
+        }
+    }
+
+    @Transactional
+    public void denyAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+        if (appointment != null) {
+            appointment.setStatus("Denied");
+            appointmentRepository.save(appointment);
+        }
+    }
+
 }
