@@ -21,8 +21,10 @@ public class AdminAppointmentController {
 
     @GetMapping
     public String showAdminAppointments(Model model) {
-        List<Appointment> appointments = appointmentService.getAppointmentsByStatus("Pending");
+        List<Appointment> appointments = appointmentService.getAppointmentsWithBidsSorted();
+        
         model.addAttribute("appointments", appointments);
-        return "admin-appointments"; // ✅ This matches the Thymeleaf template
+        return "admin-appointments";
     }
+
 }

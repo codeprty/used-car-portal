@@ -15,6 +15,9 @@ public class Appointment {
     private String username;
     private LocalDate appointmentDate;
     private String status;
+    
+    @Transient
+    private Bid highestBid;
 
     @Transient
     private Car car;
@@ -68,4 +71,13 @@ public class Appointment {
     public void setCar(Car car) {
         this.car = car;
     }
+    
+    public Bid getHighestBid() {
+        return highestBid;
+    }
+
+    public void setHighestBid(Bid highestBid) {
+        this.highestBid = highestBid;
+    }
+
 }

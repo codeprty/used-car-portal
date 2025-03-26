@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface BidRepository extends JpaRepository<Bid, Long> {
     List<Bid> findByCarId(Long carId); // Retrieve all bids for a specific car
+    List<Bid> findByCarIdAndBidderUsername(Long carId, String bidderUsername);
 }

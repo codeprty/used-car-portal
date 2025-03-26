@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AppointmentService {
@@ -86,5 +89,29 @@ public class AppointmentService {
             appointmentRepository.save(appointment);
         }
     }
+    
+    public List<Appointment> getAppointmentsWithBidsSorted() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+        Map<Long, Appointment> carAppointmentMap = new HashMap<>();
+
+        for (Appointment appointment : appointments) {
+            Car car = carRepository.findById(appointment.getCarId()).orElse(null);
+            appointment.setCar(car); // Attach car details
+
+            // Fetch highest bid for this car only
+            List<Bid> bids = bidRepository.findByCarId(appointment.getCarId());
+            bids.sort((b1, b2) -> Double.compare(b2.getBidAmount(), b1.getBidAmount())); // Sort descending
+
+            if (!bids.isEmpty()) {
+                appointment.setHighestBid(bids.get(0)); // Store only the highest bid
+            }
+
+            // Only store the first appointment for each car
+            carAppointmentMap.putIfAbsent(appointment.getCarId(), appointment);
+        }
+
+        return new ArrayList<>(carAppointmentMap.values()); // Return unique appointments per car
+    }
+
 
 }

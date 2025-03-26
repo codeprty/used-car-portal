@@ -9,31 +9,37 @@
     <table border="1">
         <thead>
             <tr>
-                <th>Car ID</th>
-                <th>Username</th>
+                <th>Car</th>
+                <th>Seller</th>
+                <th>Bidder</th>
                 <th>Appointment Date</th>
+                <th>Bid Amount</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            <!-- ✅ Correct Thymeleaf loop -->
             <tr th:each="appointment : ${appointments}">
-                <td th:text="${appointment.carId}"></td>
-                <td th:text="${appointment.username}"></td>
-                <td th:text="${appointment.appointmentDate}"></td>
-                <td th:text="${appointment.status}"></td>
-                <td>
-                    <form th:action="@{/admin/appointments/approve}" method="post">
-                        <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
-                        <button type="submit">Approve</button>
-                    </form>
-                    <form th:action="@{/admin/appointments/deny}" method="post">
-                        <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
-                        <button type="submit">Deny</button>
-                    </form>
-                </td>
-            </tr>
+            <td th:text="${appointment.highestBid != null ? appointment.highestBid.bidderUsername : 'N/A'}"></td>
+    <td th:text="${appointment.car != null ? appointment.car.make + ' ' + appointment.car.model : 'N/A'}"></td>
+    <td th:text="${appointment.car != null ? appointment.car.postedBy : 'N/A'}"></td>
+    <td th:text="${appointment.appointmentDate}"></td>
+	<td th:text="${appointment.highestBid != null ? appointment.highestBid.bidAmount : 'N/A'}"></td>
+    <td th:text="${appointment.status}"></td>
+    
+    <td>
+        <form th:action="@{/admin/appointments/approve}" method="post">
+            <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
+            <input type="hidden" name="bidId" th:value="${appointment.highestBid != null ? appointment.highestBid.id : ''}" />
+            <button type="submit" th:disabled="${appointment.highestBid == null}">Approve</button>
+        </form>
+        <form th:action="@{/admin/appointments/deny}" method="post">
+            <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
+            <button type="submit">Deny</button>
+        </form>
+    </td>
+</tr>
+
         </tbody>
     </table>
 
