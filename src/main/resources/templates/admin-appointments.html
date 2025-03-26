@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin - Manage Appointments</title>
+</head>
+<body>
+    <h2>Pending Appointments</h2>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Car ID</th>
+                <th>Username</th>
+                <th>Appointment Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ✅ Correct Thymeleaf loop -->
+            <tr th:each="appointment : ${appointments}">
+                <td th:text="${appointment.carId}"></td>
+                <td th:text="${appointment.username}"></td>
+                <td th:text="${appointment.appointmentDate}"></td>
+                <td th:text="${appointment.status}"></td>
+                <td>
+                    <form th:action="@{/admin/appointments/approve}" method="post">
+                        <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
+                        <button type="submit">Approve</button>
+                    </form>
+                    <form th:action="@{/admin/appointments/deny}" method="post">
+                        <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
+                        <button type="submit">Deny</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/admin/dashboard}">Back to Dashboard</a>
+</body>
+</html>
