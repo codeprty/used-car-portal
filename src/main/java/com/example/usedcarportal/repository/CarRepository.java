@@ -11,4 +11,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> findByPostedByAndActive(String postedBy, boolean active);
     List<Car> findByPostedBy(String postedBy);
 
+    List<Car> findByMakeContainingIgnoreCaseOrModelContainingIgnoreCase(String make, String model);
+    List<Car> findByYear(Integer year);
+    List<Car> findByPriceLessThanEqual(Double price);
+
 }
