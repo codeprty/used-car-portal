@@ -33,7 +33,7 @@ public class AppointmentController {
         // Always allow saving the bid and appointment
         appointmentService.bookAppointmentAndBid(carId, principal.getName(), appointmentDate, bidAmount);
 
-        return "redirect:/appointments"; // ✅ Redirect after saving
+        return "redirect:/home"; // ✅ Redirect after saving
     }
     
     @GetMapping("/admin")
