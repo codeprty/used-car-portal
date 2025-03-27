@@ -6,6 +6,20 @@
 </head>
 
 <body>
+<ul>
+		<li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+		<li><a th:href="@{/admin/users}">Registered Users</a></li>
+		<li><a th:href="@{/admin/cars}">Car Listings</a></li>
+		<li><a th:href="@{/admin/appointments}">Appointments</a></li>
+		<li><a href="/about-us">About Us</a></li>
+		<li><a href="/contact-us">Contact Us</a></li>
+		<li>
+			<form action="/logout" method="post">
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+				<button type="submit">Logout</button>
+			</form>
+		</li>
+	</ul>
     <h2>User Profile Management</h2>
 
     <form th:action="@{/admin/users/update}" method="post">
