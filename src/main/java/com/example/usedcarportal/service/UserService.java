@@ -26,4 +26,17 @@ public class UserService {
         user.setRole(Role.USER); // Default role is USER
         return userRepository.save(user);
     }
+    
+ // **Fetch User by Email**
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    // **Update User Profile**
+    public void updateUserProfile(String email, User updatedUser) {
+        User existingUser = getUserByEmail(email);
+        existingUser.setFullName(updatedUser.getFullName());
+        existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
+        userRepository.save(existingUser);
+    }
 }
