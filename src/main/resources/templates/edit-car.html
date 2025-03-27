@@ -4,6 +4,21 @@
     <title>Edit Car</title>
 </head>
 <body>
+<ul>
+    	<li><a href="home">Home</a></li>
+        <li><a href="/cars">Cars</a></li>
+        <li><a href="/post-car">Sell</a></li>
+        <li><a href="/register/edit-profile">Profile</a></li>
+        <li><a href="/about-us">About Us</a></li>
+        <li><a href="/contact-us">Contact Us</a></li>
+        
+        <li>
+            <form action="/logout" method="post">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                <button type="submit">Logout</button>
+            </form>
+        </li>
+    </ul>
     <h2>Edit Car Listing</h2>
     
     <form th:action="@{/edit-car/{id}(id=${car.id})}" method="post" enctype="multipart/form-data">

@@ -6,6 +6,21 @@
 </head>
 
 <body>
+<ul>
+    	<li><a href="home">Home</a></li>
+        <li><a href="/cars">Cars</a></li>
+        <li><a href="/post-car">Sell</a></li>
+        <li><a href="/register/edit-profile">Profile</a></li>
+        <li><a href="/about-us">About Us</a></li>
+        <li><a href="/contact-us">Contact Us</a></li>
+        
+        <li>
+            <form action="/logout" method="post">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                <button type="submit">Logout</button>
+            </form>
+        </li>
+    </ul>
     <h2>Car Details</h2>
 
     <img th:src="${car.imageUrl}" alt="Car Image" width="300">
