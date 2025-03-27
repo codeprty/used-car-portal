@@ -4,13 +4,13 @@ import com.example.usedcarportal.model.Appointment;
 import com.example.usedcarportal.model.Car;
 import com.example.usedcarportal.repository.CarRepository;
 import com.example.usedcarportal.service.AppointmentService;
+import com.example.usedcarportal.service.CarService;
 import com.example.usedcarportal.service.ImageUploadService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
-import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -19,11 +19,13 @@ public class CarController {
     private final CarRepository carRepository;
     private final ImageUploadService imageUploadService;
     private final AppointmentService appointmentService;
+    private final CarService carService;
 
-    public CarController(CarRepository carRepository, ImageUploadService imageUploadService, AppointmentService appointmentService) {
+    public CarController(CarRepository carRepository, ImageUploadService imageUploadService, AppointmentService appointmentService,  CarService carService) {
         this.carRepository = carRepository;
         this.imageUploadService = imageUploadService;
         this.appointmentService = appointmentService;
+        this.carService = carService;
     }
 
     // Show the homepage with user-specific car listings
@@ -42,18 +44,13 @@ public class CarController {
         return "home"; // Load home.html
     }
 
-    // Show all active car listings
+    
+    // Show all active car listings OR search for cars using filters
     @GetMapping("/cars")
-    public String showCarList(Model model) {
-        List<Car> cars = carRepository.findByActiveTrue();
+    public String listCars(@RequestParam(required = false) String search, Model model) {
+        List<Car> cars = carService.searchCars(search);
         model.addAttribute("cars", cars);
         return "cars"; // Load cars.html
-    }
-
-    // Show the car posting form
-    @GetMapping("/post-car")
-    public String showPostCarForm() {
-        return "post-car"; // Load post-car.html
     }
 
     // Handle the posting of a new car listing
@@ -84,6 +81,9 @@ public class CarController {
         carRepository.save(car);
         return "redirect:/home"; // Redirect to home page
     }
+    
+    
+
 
     // Show the edit car form for a specific car
     @GetMapping("/edit-car/{id}")
@@ -140,7 +140,7 @@ public class CarController {
         carRepository.save(car);
         return "redirect:/home";
     }
-    
+  
     // Show Car Details
     @GetMapping("/car-details/{id}")
     public String showCarDetails(@PathVariable Long id, Model model) {
@@ -151,23 +151,6 @@ public class CarController {
 
         model.addAttribute("car", car);
         return "car-details"; // Redirect to car-details.html
-    }
-    
-    @PostMapping("/book-appointment")
-    public String bookAppointment(@RequestParam Long carId, @RequestParam String appointmentDate, Principal principal) {
-        if (principal == null) {
-            return "redirect:/login"; // Ensure user is logged in
-        }
-
-        Car car = carRepository.findById(carId).orElse(null);
-        if (car == null) {
-            return "redirect:/cars?error=CarNotFound";
-        }
-
-        LocalDate date = LocalDate.parse(appointmentDate);
-        appointmentService.bookAppointment(carId, principal.getName(), date);
-
-        return "redirect:/appointments"; // Redirect to appointments page
     }
 
     @GetMapping("/appointments")
@@ -180,7 +163,7 @@ public class CarController {
         List<Appointment> userAppointments = appointmentService.getUserAppointments(username);
 
         model.addAttribute("appointments", userAppointments);
-        return "appointments"; // Load appointments.html
+        return "redirect:/home"; // Load appointments.html
     }
 
 }
