@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+</head>
+<body>
+    <h2>Edit Profile</h2>
+    
+    <form action="/register/edit-profile" method="post" th:object="${user}">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+
+    <label>Email:</label>
+    <input type="email" th:field="*{email}" readonly />
+
+    <label>Full Name:</label>
+    <input type="text" th:field="*{fullName}" required />
+
+    <label>Phone Number:</label>
+    <input type="text" th:field="*{phoneNumber}" required />
+
+    <button type="submit">Save</button>
+</form>
+
+
+
+    <!-- Cancel Button -->
+    <a href="/home"><button>Cancel</button></a>
+</body>
+</html>

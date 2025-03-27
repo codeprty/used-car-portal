@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>About Us</title>
+</head>
+
+<body>
+	<ul>
+		<li th:if="${isAdmin}"><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+		<li th:if="${isAdmin}"><a th:href="@{/admin/users}">Registered
+				Users</a></li>
+		<li th:if="${isAdmin}"><a th:href="@{/admin/cars}">Car
+				Listings</a></li>
+		<li th:if="${isAdmin}"><a th:href="@{/admin/appointments}">Appointments</a></li>
+
+		<li th:unless="${isAdmin}"><a href="/home">Home</a></li>
+		<li th:unless="${isAdmin}"><a href="/cars">Cars</a></li>
+		<li th:unless="${isAdmin}"><a href="/post-car">Sell</a></li>
+		<li th:unless="${isAdmin}"><a href="/register/edit-profile">Profile</a></li>
+
+		<li><a href="/about-us">About Us</a></li>
+		<li><a href="/contact-us">Contact Us</a></li>
+
+		<li>
+			<form action="/logout" method="post">
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+				<button type="submit">Logout</button>
+			</form>
+		</li>
+	</ul>
+
+	<h2>About Us</h2>
+	<p>Welcome to the Used Car Portal! Our mission is to connect buyers
+		and sellers in a seamless and efficient way.</p>
+
+	<h3>Who We Are</h3>
+	<p>We are a passionate team dedicated to making car buying and
+		selling hassle-free. With a secure and user-friendly platform, we help
+		users find the best deals on used cars.</p>
+
+	<h3>What We Offer</h3>
+	<ul>
+		<li>Easy car listings for sellers</li>
+		<li>Wide range of used cars for buyers</li>
+		<li>Secure appointment booking and bidding system</li>
+		<li>Admin-approved transactions for trust and security</li>
+	</ul>
+
+	<h3>Contact Us</h3>
+	<p>Email: support@usedcarportal.com</p>
+	<p>Phone: +1 (555) 123-4567</p>
+
+</body>
+
+</html>
