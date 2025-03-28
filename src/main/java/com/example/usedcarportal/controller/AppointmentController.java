@@ -5,7 +5,6 @@ import com.example.usedcarportal.service.AppointmentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
@@ -20,22 +19,27 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
-    // Handle appointment booking and bidding together
+    /**
+     * ✅ Handle appointment booking and bidding together.
+     */
     @PostMapping("/book")
-    public String bookAppointment(@RequestParam Long carId, 
-                                  @RequestParam LocalDate appointmentDate, 
-                                  @RequestParam double bidAmount, 
+    public String bookAppointment(@RequestParam Long carId,
+                                  @RequestParam LocalDate appointmentDate,
+                                  @RequestParam double bidAmount,
                                   Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         }
 
-        // Always allow saving the bid and appointment
+        // ✅ Always allow saving the bid and appointment
         appointmentService.bookAppointmentAndBid(carId, principal.getName(), appointmentDate, bidAmount);
 
         return "redirect:/home"; // ✅ Redirect after saving
     }
-    
+
+    /**
+     * ✅ View all pending appointments (Admin View).
+     */
     @GetMapping("/admin")
     public String viewPendingAppointments(Model model) {
         List<Appointment> pendingAppointments = appointmentService.getAppointmentsWithBidsSorted();
@@ -43,16 +47,22 @@ public class AppointmentController {
         return "admin-appointments";
     }
 
+    /**
+     * ✅ Approve an appointment (Admin Action).
+     */
     @PostMapping("/approve")
-    public String approveAppointment(@RequestParam Long appointmentId, @RequestParam(required = false) Long bidId) {
+    public String approveAppointment(@RequestParam Long appointmentId, 
+                                     @RequestParam(required = false) Long bidId) {
         appointmentService.approveAppointment(appointmentId, bidId);
         return "redirect:/admin/appointments";
     }
 
+    /**
+     * ✅ Deny an appointment (Admin Action).
+     */
     @PostMapping("/deny/{id}")
     public String denyAppointment(@PathVariable Long id) {
         appointmentService.denyAppointment(id);
         return "redirect:/appointments/admin"; // ✅ Ensures admin page refreshes with updated data
     }
-
 }

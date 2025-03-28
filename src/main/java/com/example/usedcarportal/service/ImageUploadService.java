@@ -8,27 +8,29 @@ import java.nio.file.Paths;
 
 @Service
 public class ImageUploadService {
-    private static final String UPLOAD_DIR = "uploads/";
+
+    private static final String UPLOAD_DIR = "uploads/"; // ✅ Define upload directory
 
     public String saveImage(MultipartFile file) {
         if (file.isEmpty()) {
-            return null;
+            return null; // ✅ Return null if file is empty
         }
+
         try {
-            // Ensure upload directory exists
+            // ✅ Ensure upload directory exists
             File uploadDir = new File(UPLOAD_DIR);
             if (!uploadDir.exists()) {
                 uploadDir.mkdirs();
             }
 
-            // Save file
+            // ✅ Save file to directory
             String filePath = UPLOAD_DIR + file.getOriginalFilename();
             file.transferTo(Paths.get(filePath));
 
-            return "/" + filePath; // Return relative path for retrieval
+            return "/" + filePath; // ✅ Return relative path for retrieval
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return null; // ✅ Handle exception and return null
         }
     }
 }

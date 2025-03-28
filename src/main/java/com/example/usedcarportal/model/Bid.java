@@ -3,6 +3,9 @@ package com.example.usedcarportal.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a bid placed on a car.
+ */
 @Entity
 @Table(name = "bids")
 public class Bid {
@@ -19,11 +22,13 @@ public class Bid {
     @Transient // Not stored in the database
     private Car carDetails;
 
-    // No-args constructor (Required by JPA)
+    // Constructors
+
+    /** No-args constructor (Required by JPA) */
     public Bid() {
     }
 
-    // Constructor for creating a new bid
+    /** Constructor for creating a new bid */
     public Bid(Long carId, String bidderUsername, double bidAmount) {
         this.carId = carId;
         this.bidderUsername = bidderUsername;
@@ -32,25 +37,52 @@ public class Bid {
     }
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
-    public Long getCarId() { return carId; }
-    public void setCarId(Long carId) { this.carId = carId; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getBidderUsername() { return bidderUsername; }
-    public void setBidderUsername(String bidderUsername) { this.bidderUsername = bidderUsername; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public double getBidAmount() { return bidAmount; }
-    public void setBidAmount(double bidAmount) { this.bidAmount = bidAmount; }
+    public Long getCarId() {
+        return carId;
+    }
 
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+    public void setCarId(Long carId) {
+        this.carId = carId;
+    }
 
-    public Car getCarDetails() { return carDetails; }
-    
-    // ✅ Add this missing setter
-    public void setCarDetails(Car carDetails) { 
+    public String getBidderUsername() {
+        return bidderUsername;
+    }
+
+    public void setBidderUsername(String bidderUsername) {
+        this.bidderUsername = bidderUsername;
+    }
+
+    public double getBidAmount() {
+        return bidAmount;
+    }
+
+    public void setBidAmount(double bidAmount) {
+        this.bidAmount = bidAmount;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Car getCarDetails() {
+        return carDetails;
+    }
+
+    public void setCarDetails(Car carDetails) {
         this.carDetails = carDetails;
     }
 }

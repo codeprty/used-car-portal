@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import java.util.List;
 
 @Controller
@@ -19,15 +18,19 @@ public class AdminUserController {
         this.userRepository = userRepository;
     }
 
-    // ✅ Display Registered Users
+    /**
+     * ✅ Display the list of registered users.
+     */
     @GetMapping("/admin/users")
     public String listUsers(Model model) {
         List<User> users = userRepository.findAll();
         model.addAttribute("users", users);
-        return "admin-users";
+        return "admin-users"; // Load admin-users.html
     }
 
-    // ✅ Delete User by ID
+    /**
+     * ✅ Delete a user by ID.
+     */
     @PostMapping("/admin/users/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);

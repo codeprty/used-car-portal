@@ -3,12 +3,10 @@ package com.example.usedcarportal.controller;
 import com.example.usedcarportal.model.Role;
 import com.example.usedcarportal.model.User;
 import com.example.usedcarportal.repository.UserRepository;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
 @Controller
@@ -23,7 +21,9 @@ public class AdminUserProfileController {
         this.passwordEncoder = passwordEncoder; // ✅ Assign injected encoder
     }
 
-    // ✅ Display User Profile Management Page
+    /**
+     * ✅ Display User Profile Management Page.
+     */
     @GetMapping("/edit/{id}")
     public String editUser(@PathVariable Long id, Model model) {
         Optional<User> user = userRepository.findById(id);
@@ -35,7 +35,9 @@ public class AdminUserProfileController {
         return "redirect:/admin/users"; // Redirect if user not found
     }
 
-    // ✅ Save Updated User Details
+    /**
+     * ✅ Save Updated User Details.
+     */
     @PostMapping("/update")
     public String updateUser(@ModelAttribute User updatedUser) {
         Optional<User> existingUser = userRepository.findById(updatedUser.getId());
@@ -55,8 +57,10 @@ public class AdminUserProfileController {
         }
         return "redirect:/admin/users";
     }
-    
-    // ✅ Reset Password
+
+    /**
+     * ✅ Reset User Password to Default.
+     */
     @PostMapping("/reset-password/{id}")
     public String resetPassword(@PathVariable Long id) {
         Optional<User> userOptional = userRepository.findById(id);

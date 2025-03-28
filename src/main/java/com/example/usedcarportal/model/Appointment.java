@@ -3,6 +3,9 @@ package com.example.usedcarportal.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Entity representing an appointment for a car viewing.
+ */
 @Entity
 @Table(name = "appointments")
 public class Appointment {
@@ -15,7 +18,7 @@ public class Appointment {
     private String username;
     private LocalDate appointmentDate;
     private String status;
-    
+
     @Transient
     private Bid highestBid;
 
@@ -23,6 +26,7 @@ public class Appointment {
     private Car car;
 
     // Getters and Setters
+
     public Long getId() {
         return id;
     }
@@ -62,16 +66,15 @@ public class Appointment {
     public void setStatus(String status) {
         this.status = status;
     }
-    
-     // ✅ Add Getter and Setter for Car
-     public Car getCar() {
+
+    public Car getCar() {
         return car;
     }
 
     public void setCar(Car car) {
         this.car = car;
     }
-    
+
     public Bid getHighestBid() {
         return highestBid;
     }
@@ -79,5 +82,4 @@ public class Appointment {
     public void setHighestBid(Bid highestBid) {
         this.highestBid = highestBid;
     }
-
 }

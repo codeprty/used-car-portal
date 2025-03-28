@@ -1,12 +1,17 @@
 package com.example.usedcarportal.dto;
 
+/**
+ * Data Transfer Object (DTO) for user registration.
+ */
 public class UserRegistrationDto {
+    
     private String email;
     private String password;
     private String fullName;
     private String phoneNumber;
 
     // Getters and Setters
+
     public String getEmail() {
         return email;
     }

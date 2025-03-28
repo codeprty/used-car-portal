@@ -3,6 +3,9 @@ package com.example.usedcarportal.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a completed car transaction.
+ */
 @Entity
 @Table(name = "transactions")
 public class Transaction {
@@ -17,8 +20,17 @@ public class Transaction {
     private double salePrice;
     private LocalDateTime saleDate;
 
+    // No-args constructor (Required by JPA)
     public Transaction() {}
 
+    /**
+     * Constructor to create a new transaction.
+     * 
+     * @param carId          ID of the car being sold
+     * @param sellerUsername Username of the seller
+     * @param buyerUsername  Username of the buyer
+     * @param salePrice      Final sale price of the car
+     */
     public Transaction(Long carId, String sellerUsername, String buyerUsername, double salePrice) {
         this.carId = carId;
         this.sellerUsername = sellerUsername;
@@ -27,7 +39,7 @@ public class Transaction {
         this.saleDate = LocalDateTime.now();
     }
 
-    // ✅ Add Getters and Setters
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -17,22 +18,24 @@ public class UserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
+    // ✅ Register a new user
     public User registerUser(UserRegistrationDto registrationDto) {
         User user = new User();
         user.setEmail(registrationDto.getEmail());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
         user.setFullName(registrationDto.getFullName());
         user.setPhoneNumber(registrationDto.getPhoneNumber());
-        user.setRole(Role.USER); // Default role is USER
+        user.setRole(Role.USER); // ✅ Default role is USER
         return userRepository.save(user);
     }
-    
- // **Fetch User by Email**
+
+    // ✅ Fetch User by Email
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    // **Update User Profile**
+    // ✅ Update User Profile
     public void updateUserProfile(String email, User updatedUser) {
         User existingUser = getUserByEmail(email);
         existingUser.setFullName(updatedUser.getFullName());

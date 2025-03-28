@@ -9,21 +9,30 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Security configuration for the application.
+ */
 @Configuration
 public class SecurityConfig {
 
+    /**
+     * Configures HTTP security settings.
+     * 
+     * @param http HttpSecurity object
+     * @return SecurityFilterChain
+     * @throws Exception if an error occurs during configuration
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/register", "/login", "/css/**", "/js/**").permitAll()
-                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN") // ✅ Match ENUM format
+                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN") // ✅ Restrict admin URLs
                 .anyRequest().authenticated()
             )
             .formLogin(login -> login
@@ -40,12 +49,21 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Provides a password encoder using BCrypt.
+     * 
+     * @return PasswordEncoder instance
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ Redirect Users Based on Role
+    /**
+     * Custom authentication success handler to redirect users based on role.
+     * 
+     * @return AuthenticationSuccessHandler
+     */
     @Bean
     public AuthenticationSuccessHandler customSuccessHandler() {
         return new AuthenticationSuccessHandler() {

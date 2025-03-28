@@ -22,14 +22,16 @@ public class AdminController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ✅ Auto-create default admin if not exists
+    /**
+     * ✅ Auto-create a default admin if one does not exist.
+     */
     @PostConstruct
     public void createDefaultAdmin() {
         if (!userRepository.existsByRole(Role.ADMIN)) {
             User admin = new User(
                 "admin@hificars.com",
                 passwordEncoder.encode("admin123"), // Default password
-                "Default Admin",
+                "Admin",
                 "1234567890",
                 Role.ADMIN
             );
@@ -38,9 +40,11 @@ public class AdminController {
         }
     }
 
-    // ✅ Admin Dashboard Page
+    /**
+     * ✅ Load the Admin Dashboard Page.
+     */
     @GetMapping("/dashboard")
     public String showAdminDashboard(Model model) {
-        return "admin-dashboard"; // Loads admin-dashboard.html
+        return "admin-dashboard"; // Load admin-dashboard.html
     }
 }
