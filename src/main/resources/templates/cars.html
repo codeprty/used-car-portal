@@ -1,52 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<title>Car Listings</title>
+    <title>Car Listings</title>
 </head>
+
 <body>
-	    <ul>
-    	<li><a href="home">Home</a></li>
-        <li><a href="/cars">Cars</a></li>
-        <li><a href="/post-car">Sell</a></li>
-        <li><a href="/register/edit-profile">Profile</a></li>
-        <li><a href="/about-us">About Us</a></li>
-        <li><a href="/contact-us">Contact Us</a></li>
-        
-        <li>
-            <form action="/logout" method="post">
-                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-                <button type="submit">Logout</button>
-            </form>
-        </li>
-    </ul>
 
-	<h1>Available Cars</h1>
+    <nav>
+        <ul>
+            <li><a href="home">Home</a></li>
+            <li><a href="/cars">Cars</a></li>
+            <li><a href="/post-car">Post</a></li>
+            <li><a href="/register/edit-profile">Profile</a></li>
+            <li><a href="/about-us">About Us</a></li>
+            <li><a href="/contact-us">Contact Us</a></li>
+            <li>
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
 
-	<form action="/cars" method="get">
-		<input type="text" name="search"
-			placeholder="Search by Make, Model, Year, or Price" required>
-		<button type="submit">Search</button>
-	</form>
+    <h1>Car Listings</h1>
 
+    <form action="/cars" method="get">
+        <input type="text" name="search" placeholder="Search by Make, Model, Year, or Price" required>
+        <button type="submit">Search</button>
+    </form>
 
+    <div class="car-grid">
+        <div th:each="car : ${cars}" class="car-item">
+            <img th:src="${car.imageUrl}" alt="Car Image" width="150">
+            <p><strong th:text="${car.make} + ' ' + ${car.model}"></strong></p>
+            <p>Year: <span th:text="${car.year}"></span></p>
+            <p>Price: $<span th:text="${car.price}"></span></p>
+            <a th:href="@{/car-details/{id}(id=${car.id})}">View Details</a>
+        </div>
+    </div>
 
-	<!-- Car Listings -->
-	<div class="car-grid">
-		<div th:each="car : ${cars}" class="car-item">
-			<img th:src="${car.imageUrl}" alt="Car Image" width="150">
-			<p>
-				<strong th:text="${car.make} + ' ' + ${car.model}"></strong>
-			</p>
-			<p>
-				Year: <span th:text="${car.year}"></span>
-			</p>
-			<p>
-				Price: $<span th:text="${car.price}"></span>
-			</p>
-			<a th:href="@{/car-details/{id}(id=${car.id})}">View Details</a>
-		</div>
-	</div>
-
-	<a href="/home">Back to Home</a>
 </body>
+
 </html>

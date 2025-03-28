@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Car Listings (Admin)</title>
+    <title>Car Listings</title>
 </head>
+
 <body>
-<ul>
-		<li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
-		<li><a th:href="@{/admin/users}">Registered Users</a></li>
-		<li><a th:href="@{/admin/cars}">Car Listings</a></li>
-		<li><a th:href="@{/admin/appointments}">Appointments</a></li>
-		<li><a href="/about-us">About Us</a></li>
-		<li><a href="/contact-us">Contact Us</a></li>
-		<li>
-			<form action="/logout" method="post">
-				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-				<button type="submit">Logout</button>
-			</form>
-		</li>
-	</ul>
+
+    <nav>
+        <ul>
+            <li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+            <li><a href="/about-us">About Us</a></li>
+            <li><a href="/contact-us">Contact Us</a></li>
+            <li>
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+
     <h2>Car Listings</h2>
 
     <table border="1">
@@ -40,7 +43,7 @@
                 <td th:text="${car.model}"></td>
                 <td th:text="${car.year}"></td>
                 <td th:text="${car.price}"></td>
-                <td th:text="${car.postedBy}"></td> <!-- Show the email of the user who posted -->
+                <td th:text="${car.postedBy}"></td> 
                 <td th:text="${car.active ? 'Active' : 'Inactive'}"></td>
                 <td>
                     <a th:href="@{/admin/cars/view/{id}(id=${car.id})}">View</a>
@@ -49,7 +52,6 @@
         </tbody>
     </table>
 
-    <br>
-    <a href="/admin/dashboard">Back to Dashboard</a>
 </body>
+
 </html>

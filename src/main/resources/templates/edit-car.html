@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Edit Car</title>
 </head>
+
 <body>
-<ul>
-    	<li><a href="home">Home</a></li>
-        <li><a href="/cars">Cars</a></li>
-        <li><a href="/post-car">Sell</a></li>
-        <li><a href="/register/edit-profile">Profile</a></li>
-        <li><a href="/about-us">About Us</a></li>
-        <li><a href="/contact-us">Contact Us</a></li>
-        
-        <li>
-            <form action="/logout" method="post">
-                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-                <button type="submit">Logout</button>
-            </form>
-        </li>
-    </ul>
+
+    <nav>
+        <ul>
+            <li><a href="home">Home</a></li>
+            <li><a href="/cars">Cars</a></li>
+            <li><a href="/post-car">Post</a></li>
+            <li><a href="/register/edit-profile">Profile</a></li>
+            <li><a href="/about-us">About Us</a></li>
+            <li><a href="/contact-us">Contact Us</a></li>
+            <li>
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+
     <h2>Edit Car Listing</h2>
-    
+
     <form th:action="@{/edit-car/{id}(id=${car.id})}" method="post" enctype="multipart/form-data">
         <label>Make:</label>
         <input type="text" name="make" th:value="${car.make}" required>
@@ -47,7 +52,6 @@
         <input type="file" name="imageFile">
         <br>
 
-        <!-- Dropdown for Active Status -->
         <label>Status:</label>
         <select name="active">
             <option value="true" th:selected="${car.active}">Activate</option>
@@ -59,5 +63,7 @@
     </form>
 
     <a href="/cars">Cancel</a>
+
 </body>
+
 </html>

@@ -1,38 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<title>Admin - Manage Appointments</title>
-</head>
-<body>
-<ul>
-		<li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
-		<li><a th:href="@{/admin/users}">Registered Users</a></li>
-		<li><a th:href="@{/admin/cars}">Car Listings</a></li>
-		<li><a th:href="@{/admin/appointments}">Appointments</a></li>
-		<li><a href="/about-us">About Us</a></li>
-		<li><a href="/contact-us">Contact Us</a></li>
-		<li>
-			<form action="/logout" method="post">
-				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-				<button type="submit">Logout</button>
-			</form>
-		</li>
-	</ul>
-	<h2>Pending Appointments</h2>
 
-	<table border="1">
-		<thead>
-			<tr>
-				<th>Car</th>
-				<th>Seller</th>
-				<th>Bidder</th>
-				<th>Appointment Date</th>
-				<th>Bid Amount</th>
-				<th>Status</th>
-				<th>Action</th>
-			</tr>
-		</thead>
-		<tbody>
+<head>
+    <title>Appointment Management</title>
+</head>
+
+<body>
+
+    <nav>
+        <ul>
+            <li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+            <li><a href="/about-us">About Us</a></li>
+            <li><a href="/contact-us">Contact Us</a></li>
+            <li>
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+
+    <h2>Appointment Management</h2>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Car</th>
+                <th>Seller</th>
+                <th>Bidder</th>
+                <th>Appointment Date</th>
+                <th>Bid Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
             <tr th:each="appointment : ${appointments}">
                 <td th:text="${appointment.car != null ? appointment.car.make + ' ' + appointment.car.model : 'N/A'}"></td>
                 <td th:text="${appointment.car != null ? appointment.car.postedBy : 'N/A'}"></td>
@@ -42,7 +45,7 @@
                 <td th:text="${appointment.status}"></td>
                 <td>
                     <form th:action="@{/appointments/approve}" method="post">
-                        <input type="hidden" name="appointmentId" th:value="${appointment.id}" /> 
+                        <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
                         <input type="hidden" name="bidId" th:value="${appointment.highestBid != null ? appointment.highestBid.id : ''}" />
                         <button type="submit"
                             th:disabled="${appointment.status != 'Pending'}"
@@ -61,8 +64,8 @@
                 </td>
             </tr>
         </tbody>
-
-	</table>
+    </table>
 
 </body>
+
 </html>

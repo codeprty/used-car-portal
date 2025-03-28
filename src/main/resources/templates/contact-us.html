@@ -1,51 +1,61 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Contact Us - Used Car Portal</title>
+    <title>Contact Us</title>
 </head>
+
 <body>
-	<ul>
-        <li th:if="${isAdmin}"><a th:href="@{/admin/dashboard}">Dashboard</a></li>
-        <li th:if="${isAdmin}"><a th:href="@{/admin/users}">Registered Users</a></li>
-        <li th:if="${isAdmin}"><a th:href="@{/admin/cars}">Car Listings</a></li>
-        <li th:if="${isAdmin}"><a th:href="@{/admin/appointments}">Appointments</a></li>
 
-        <li th:unless="${isAdmin}"><a href="/home">Home</a></li>
-        <li th:unless="${isAdmin}"><a href="/cars">Cars</a></li>
-        <li th:unless="${isAdmin}"><a href="/post-car">Sell</a></li>
-        <li th:unless="${isAdmin}"><a href="/register/edit-profile">Profile</a></li>
+    <nav>
+        <ul>
+            <li th:if="${isAdmin}">
+                <a th:href="@{/admin/dashboard}">Dashboard</a>
+            </li>
 
-        <li><a href="/about-us">About Us</a></li>
-        <li><a href="/contact-us">Contact Us</a></li>
+            <li th:unless="${isAdmin}"><a href="/home">Home</a></li>
+            <li th:unless="${isAdmin}"><a href="/cars">Cars</a></li>
+            <li th:unless="${isAdmin}"><a href="/post-car">Post</a></li>
+            <li th:unless="${isAdmin}"><a href="/register/edit-profile">Profile</a></li>
 
-        <li>
-            <form action="/logout" method="post">
-                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-                <button type="submit">Logout</button>
-            </form>
-        </li>
-    </ul>
+            <li><a href="/about-us">About Us</a></li>
+            <li><a href="/contact-us">Contact Us</a></li>
+
+            <li>
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+    
     <h2>Contact Us</h2>
     <p>Have any questions or need assistance? Get in touch with us!</p>
 
-    <h3>Our Contact Information</h3>
-    <p>Email: support@usedcarportal.com</p>
-    <p>Phone: +1 (555) 123-4567</p>
-    <p>Address: 123 Used Car Street, Auto City, USA</p>
-
     <h3>Send Us a Message</h3>
+
     <form action="#" method="post">
         <label for="name">Your Name:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
+        <input type="text" id="name" name="name" required>
+        <br><br>
 
         <label for="email">Your Email:</label><br>
-        <input type="email" id="email" name="email" required><br><br>
+        <input type="email" id="email" name="email" required>
+        <br><br>
 
         <label for="message">Your Message:</label><br>
-        <textarea id="message" name="message" rows="4" required></textarea><br><br>
+        <textarea id="message" name="message" rows="4" required></textarea>
+        <br><br>
 
         <button type="submit">Send Message</button>
     </form>
 
+    <h3>Contact Information</h3>
+    <p><strong>Email:</strong> support@usedcarportal.com</p>
+    <p><strong>Phone:</strong> +604-218 0333</p>
+    <p><strong>Address:</strong> 54, Jln Sultan Ahmad Shah, 10050 George Town, Pulau Pinang.</p>
+
 </body>
+
 </html>

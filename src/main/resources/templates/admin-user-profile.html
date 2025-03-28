@@ -2,37 +2,41 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>User Profile Management</title>
+    <title>User Management</title>
 </head>
 
 <body>
-<ul>
-		<li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
-		<li><a th:href="@{/admin/users}">Registered Users</a></li>
-		<li><a th:href="@{/admin/cars}">Car Listings</a></li>
-		<li><a th:href="@{/admin/appointments}">Appointments</a></li>
-		<li><a href="/about-us">About Us</a></li>
-		<li><a href="/contact-us">Contact Us</a></li>
-		<li>
-			<form action="/logout" method="post">
-				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-				<button type="submit">Logout</button>
-			</form>
-		</li>
-	</ul>
-    <h2>User Profile Management</h2>
+
+    <nav>
+        <ul>
+            <li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+            <li><a href="/about-us">About Us</a></li>
+            <li><a href="/contact-us">Contact Us</a></li>
+            <li>
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+
+    <h2>User Management</h2>
 
     <form th:action="@{/admin/users/update}" method="post">
         <input type="hidden" name="id" th:value="${user.id}" />
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" th:value="${user.email}" required /><br>
+        <input type="email" id="email" name="email" th:value="${user.email}" required />
+        <br>
 
         <label for="fullName">Full Name:</label>
-        <input type="text" id="fullName" name="fullName" th:value="${user.fullName}" required /><br>
+        <input type="text" id="fullName" name="fullName" th:value="${user.fullName}" required />
+        <br>
 
         <label for="phoneNumber">Phone Number:</label>
-        <input type="text" id="phoneNumber" name="phoneNumber" th:value="${user.phoneNumber}" required /><br>
+        <input type="text" id="phoneNumber" name="phoneNumber" th:value="${user.phoneNumber}" required />
+        <br>
 
         <label for="role">Role:</label>
         <select id="role" name="role">
@@ -42,11 +46,11 @@
 
         <br><br>
 
-        <!-- ✅ Only Reset Button (No Label, No Password Field) -->
         <button type="button" onclick="resetPassword()">Reset Password</button>
         <input type="hidden" id="hiddenPassword" name="password" value="" />
 
         <br><br>
+
         <button type="submit">Save</button>
     </form>
 
