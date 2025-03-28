@@ -14,68 +14,61 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Security configuration for the application.
- */
+// Configures security settings for HTTP requests, authentication, and login.
 @Configuration
 public class SecurityConfig {
 
-    /**
-     * Configures HTTP security settings.
-     * 
-     * @param http HttpSecurity object
-     * @return SecurityFilterChain
-     * @throws Exception if an error occurs during configuration
-     */
+    // Configures HTTP security settings.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
+                // Permit access to the register, login, and static assets
                 .requestMatchers("/register", "/login", "/css/**", "/js/**").permitAll()
-                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN") // ✅ Restrict admin URLs
+                // Restrict admin URLs to users with the ROLE_ADMIN authority
+                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                // Require authentication for all other requests
                 .anyRequest().authenticated()
             )
             .formLogin(login -> login
+                // Custom login page
                 .loginPage("/login")
-                .successHandler(customSuccessHandler()) // ✅ Custom role-based redirect
+                // Redirect users after successful login based on role
+                .successHandler(customSuccessHandler())
                 .permitAll()
             )
             .logout(logout -> logout
+                // Custom logout URL and redirect after successful logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
             );
 
-        return http.build();
+        return http.build(); // Builds the security configuration
     }
 
-    /**
-     * Provides a password encoder using BCrypt.
-     * 
-     * @return PasswordEncoder instance
-     */
+    // Provides a password encoder using BCrypt.
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * Custom authentication success handler to redirect users based on role.
-     * 
-     * @return AuthenticationSuccessHandler
-     */
+    // Custom authentication success handler to redirect users based on their role.
     @Bean
     public AuthenticationSuccessHandler customSuccessHandler() {
         return new AuthenticationSuccessHandler() {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, 
                                                 Authentication authentication) throws IOException, ServletException {
-                System.out.println("User Authorities: " + authentication.getAuthorities()); // Debugging
+                // Debugging: Print the user's authorities
+                System.out.println("User Authorities: " + authentication.getAuthorities());
 
+                // Redirect Admins to the admin dashboard
                 if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-                    response.sendRedirect("/admin/dashboard"); // ✅ Redirect Admins
+                    response.sendRedirect("/admin/dashboard");
                 } else {
-                    response.sendRedirect("/home"); // ✅ Redirect Users
+                    // Redirect regular users to the home page
+                    response.sendRedirect("/home");
                 }
             }
         };

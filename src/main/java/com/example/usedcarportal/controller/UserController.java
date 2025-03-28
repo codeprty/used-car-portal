@@ -9,67 +9,43 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Controller for handling user registration and profile management.
- */
+// Controller for handling user registration and profile management
 @Controller
 @RequestMapping("/register")
 public class UserController {
 
-    private final UserService userService;
+    private final UserService userService; // Service for user-related operations
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    /**
-     * Displays the user registration form.
-     *
-     * @param model The model to store attributes.
-     * @return The registration page view.
-     */
+    // Handles GET request to display the user registration form
     @GetMapping
     public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new UserRegistrationDto());
-        return "register";
+        model.addAttribute("user", new UserRegistrationDto()); // Add empty DTO to model
+        return "register"; // Return the registration view
     }
 
-    /**
-     * Handles user registration.
-     *
-     * @param userDto The DTO containing user registration data.
-     * @return Redirect to the login page with success message.
-     */
+    // Handles POST request to register a new user
     @PostMapping
     public String registerUser(@ModelAttribute("user") UserRegistrationDto userDto) {
-        userService.registerUser(userDto);
-        return "redirect:/login?success";
+        userService.registerUser(userDto); // Register the user using the service
+        return "redirect:/login?success"; // Redirect to login page with success message
     }
 
-    /**
-     * Displays the edit profile page.
-     *
-     * @param model        The model to store attributes.
-     * @param userDetails  The currently authenticated user.
-     * @return The edit-profile page view.
-     */
+    // Handles GET request to display the edit profile page
     @GetMapping("/edit-profile")
     public String showEditProfile(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userService.getUserByEmail(userDetails.getUsername());
-        model.addAttribute("user", user);
-        return "edit-profile";
+        User user = userService.getUserByEmail(userDetails.getUsername()); // Fetch user details
+        model.addAttribute("user", user); // Add user data to model
+        return "edit-profile"; // Return the edit-profile view
     }
 
-    /**
-     * Handles profile updates.
-     *
-     * @param updatedUser  The updated user details.
-     * @param userDetails  The currently authenticated user.
-     * @return Redirect to the home page with a profile update confirmation.
-     */
+    // Handles POST request to update user profile
     @PostMapping("/edit-profile")
     public String updateProfile(@ModelAttribute User updatedUser, @AuthenticationPrincipal UserDetails userDetails) {
-        userService.updateUserProfile(userDetails.getUsername(), updatedUser);
-        return "redirect:/home?profileUpdated";
+        userService.updateUserProfile(userDetails.getUsername(), updatedUser); // Update user data
+        return "redirect:/home?profileUpdated"; // Redirect to home with update confirmation
     }
 }

@@ -6,13 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 
-    /**
-     * Displays the login page.
-     *
-     * @return The name of the login view.
-     */
+    // Handle GET request to display the login page
     @GetMapping("/login")
     public String showLoginPage() {
-        return "login";
+        return "login"; // Return the login view template
     }
 }

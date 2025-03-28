@@ -3,40 +3,31 @@ package com.example.usedcarportal.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * Entity representing a completed car transaction.
- */
+// Entity representing a completed car transaction.
 @Entity
-@Table(name = "transactions")
+@Table(name = "transactions") // Maps this class to the "transactions" table in the database
 public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // Unique identifier for the transaction
 
-    private Long carId;
-    private String sellerUsername;
-    private String buyerUsername;
-    private double salePrice;
-    private LocalDateTime saleDate;
+    private Long carId; // ID of the car involved in the transaction
+    private String sellerUsername; // Username of the seller
+    private String buyerUsername; // Username of the buyer
+    private double salePrice; // Final sale price of the car
+    private LocalDateTime saleDate; // Date and time when the transaction was completed
 
     // No-args constructor (Required by JPA)
     public Transaction() {}
 
-    /**
-     * Constructor to create a new transaction.
-     * 
-     * @param carId          ID of the car being sold
-     * @param sellerUsername Username of the seller
-     * @param buyerUsername  Username of the buyer
-     * @param salePrice      Final sale price of the car
-     */
+    // Constructor to create a new transaction./
     public Transaction(Long carId, String sellerUsername, String buyerUsername, double salePrice) {
         this.carId = carId;
         this.sellerUsername = sellerUsername;
         this.buyerUsername = buyerUsername;
         this.salePrice = salePrice;
-        this.saleDate = LocalDateTime.now();
+        this.saleDate = LocalDateTime.now(); // Set the sale date to the current time
     }
 
     // Getters and Setters

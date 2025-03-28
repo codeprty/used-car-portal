@@ -10,54 +10,33 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PageController {
 
-    /**
-     * Displays the car posting form.
-     *
-     * @return The name of the post-car view.
-     */
+    // Handles GET request to display the car posting form
     @GetMapping("/post-car")
     public String showPostCarForm() {
-        return "post-car";
+        return "post-car"; // Return the post-car view template
     }
 
-    /**
-     * Displays the About Us page.
-     *
-     * @param model     The model to store attributes.
-     * @param principal The currently authenticated user.
-     * @return The name of the about-us view.
-     */
+    // Handles GET request to display the About Us page
     @GetMapping("/about-us")
     public String aboutUs(Model model, Principal principal) {
-        addUserRoleToModel(model, principal);
-        return "about-us";
+        addUserRoleToModel(model, principal); // Add user role info to the model
+        return "about-us"; // Return the about-us view template
     }
 
-    /**
-     * Displays the Contact Us page.
-     *
-     * @param model     The model to store attributes.
-     * @param principal The currently authenticated user.
-     * @return The name of the contact-us view.
-     */
+    // Handles GET request to display the Contact Us page
     @GetMapping("/contact-us")
     public String contactUs(Model model, Principal principal) {
-        addUserRoleToModel(model, principal);
-        return "contact-us";
+        addUserRoleToModel(model, principal); // Add user role info to the model
+        return "contact-us"; // Return the contact-us view template
     }
 
-    /**
-     * Adds the user's role information to the model.
-     *
-     * @param model     The model to store attributes.
-     * @param principal The currently authenticated user.
-     */
+    // Adds the user's role (admin or not) to the model for role-based UI rendering
     private void addUserRoleToModel(Model model, Principal principal) {
         if (principal != null) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             boolean isAdmin = authentication.getAuthorities().stream()
                     .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
-            model.addAttribute("isAdmin", isAdmin);
+            model.addAttribute("isAdmin", isAdmin); // Store admin status in the model
         }
     }
 }

@@ -2,45 +2,35 @@ package com.example.usedcarportal.model;
 
 import jakarta.persistence.*;
 
-/**
- * Entity representing a registered user in the system.
- */
+// Entity representing a registered user in the system.
 @Entity
-@Table(name = "users")
+@Table(name = "users") // Maps this class to the "users" table in the database
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // Unique identifier for the user
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String email; // User's email (must be unique)
 
     @Column(nullable = false)
-    private String password;
+    private String password; // User's hashed password
 
     @Column(nullable = false)
-    private String fullName;
+    private String fullName; // User's full name
 
     @Column(nullable = false)
-    private String phoneNumber;
+    private String phoneNumber; // User's contact number
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role; // USER or ADMIN
+    private Role role; // USER or ADMIN role
 
     // No-args constructor (Required by JPA)
     public User() {}
 
-    /**
-     * Constructor for creating a new user.
-     *
-     * @param email       User's email (unique)
-     * @param password    User's hashed password
-     * @param fullName    User's full name
-     * @param phoneNumber User's contact number
-     * @param role        User role (USER or ADMIN)
-     */
+    // Constructor for creating a new user.
     public User(String email, String password, String fullName, String phoneNumber, Role role) {
         this.email = email;
         this.password = password;
